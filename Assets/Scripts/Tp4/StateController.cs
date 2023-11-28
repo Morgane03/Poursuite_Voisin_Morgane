@@ -19,7 +19,7 @@ public class StateController : MonoBehaviour
 
     public PursuingState chaseState;
     public PatrolState patrolState;
-    //public HurtState hurtState = new HurtState();
+    public ChatState chatState = new ChatState();
 
     public Transform[] patrolWaypoints;
     public float pursueDistance = 5f; // Distance à partir de laquelle le garde passe en mode Poursuite
@@ -42,6 +42,10 @@ public class StateController : MonoBehaviour
         {
             // Passer en mode poursuite
             ChangeState(new PursuingState(GetComponent<NavMeshAgent>(), player.transform));
+        }
+        if (MathHelper.VectorDistance(transform.position, player.transform.position) <= pursueDistance && currentState != chaseState)
+        {
+            ChangeState(chatState);
         }
     }
 
