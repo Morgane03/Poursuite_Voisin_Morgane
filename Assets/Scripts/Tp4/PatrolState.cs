@@ -30,16 +30,16 @@ public class PatrolState : IState
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
             SetDestination();
         }
-        /*
+        
         // Vérification si le joueur est à distance faible pour passer en mode Poursuite
-        if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < controller.pursueDistance)
+        if (MathHelper.VectorDistance(controller.transform.position, controller.player.transform.position) < controller.pursueDistance)
         {
             controller.ChangeState(controller.chaseState);
-        }*/
+        }
     }
     public void OnHurt(StateController controller)
     {
-        // Pas d'action spécifique lorsqu'on est blessé en mode Patrouille
+        // Pas d'action spécifique lorsqu'on est blessé en mode Patrouille car pas possible
     }
     public void OnExit(StateController controller)
     {

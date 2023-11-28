@@ -1,23 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/*
+using UnityEngine.AI;
+
 public class PursuingState : IState
 {
-    public void OnEnter()
+
+    private NavMeshAgent navMeshAgent;
+    private Transform player;
+
+    public PursuingState(NavMeshAgent agent, Transform playerTransform)
     {
-        // "What was that!?"
+        navMeshAgent = agent;
+        player = playerTransform;
     }
-    public void UpdateState()
+
+    public void OnEnter(StateController controller)
     {
-        // Search for player
+        navMeshAgent.enabled = true;
+        navMeshAgent.SetDestination(player.position);
     }
-    public void OnHurt()
+    public void UpdateState(StateController controller)
     {
-        // Transition to Hurt State
+        // Vérifier si le joueur est encore dans la distance de poursuite
+        if (MathHelper.VectorDistance(controller.transform.position, player.position) > controller.pursueDistance)
+        {
+            controller.ChangeState(controller.patrolState);
+        }
     }
-    public void OnExit()
+    public void OnHurt(StateController controller)
     {
-        // "Must've been the wind"
+        controller.ChangeState(controller.patrolState);
     }
-}*/
+
+    
+    public void OnExit(StateController controller)
+    {
+        navMeshAgent.enabled = false;
+    }
+}

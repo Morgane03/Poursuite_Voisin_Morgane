@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 
 public interface IState
@@ -15,13 +17,14 @@ public class StateController : MonoBehaviour
 {
     IState currentState;
 
-    //public PursuingState chaseState = new PursuingState();
+    public PursuingState chaseState;
     public PatrolState patrolState;
     //public HurtState hurtState = new HurtState();
 
     public Transform[] patrolWaypoints;
-    public float pursueDistance = 10f; // Distance à partir de laquelle le garde passe en mode Poursuite
+    public float pursueDistance = 5f; // Distance à partir de laquelle le garde passe en mode Poursuite
     public GameObject player;
+
 
     public void Start()
     {
@@ -35,7 +38,13 @@ public class StateController : MonoBehaviour
         {
             currentState.UpdateState(this);
         }
+        if (MathHelper.VectorDistance(transform.position, player.transform.position) < pursueDistance)
+        {
+            // Passer en mode poursuite
+            ChangeState(new PursuingState(GetComponent<NavMeshAgent>(), player.transform));
+        }
     }
+
     public void ChangeState(IState newState)
     {
         if (currentState != null)
