@@ -36,6 +36,12 @@ public class PatrolState : IState
         {
             controller.ChangeState(controller.chaseState);
         }
+
+        if (MathHelper.VectorDistance(controller.transform.position, controller.guard.transform.position) <= controller.chatDistance && controller.currentState != controller.chaseState)
+        {
+            controller.ChangeState(controller.chatState);
+        }
+
     }
     public void OnHurt(StateController controller)
     {

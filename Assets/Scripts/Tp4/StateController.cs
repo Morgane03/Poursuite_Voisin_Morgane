@@ -15,20 +15,28 @@ public interface IState
 
 public class StateController : MonoBehaviour
 {
-    IState currentState;
+    public IState currentState;
 
     public PursuingState chaseState;
     public PatrolState patrolState;
-    public ChatState chatState = new ChatState();
+    public ChatState chatState;
+    public AlerteState alerteState;
 
     public Transform[] patrolWaypoints;
     public float pursueDistance = 5f; // Distance à partir de laquelle le garde passe en mode Poursuite
+    public float chatDistance = 3f; // Distance à partir de laquelle le garde passe en mode Chat
     public GameObject player;
+    public GameObject guard;
 
 
     public void Start()
     {
         patrolState = new PatrolState(patrolWaypoints);
+        chaseState = new PursuingState(this.GetComponent<NavMeshAgent>(), player.transform);
+        chatState = new ChatState(this.GetComponent<NavMeshAgent>(), 3f, 0f);
+        alerteState = new AlerteState(this);
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        playerController.OnNoiseMade += ActivateAlertState;
         ChangeState(patrolState);
     }
 
@@ -37,15 +45,6 @@ public class StateController : MonoBehaviour
         if (currentState != null)
         {
             currentState.UpdateState(this);
-        }
-        if (MathHelper.VectorDistance(transform.position, player.transform.position) < pursueDistance)
-        {
-            // Passer en mode poursuite
-            ChangeState(new PursuingState(GetComponent<NavMeshAgent>(), player.transform));
-        }
-        if (MathHelper.VectorDistance(transform.position, player.transform.position) <= pursueDistance && currentState != chaseState)
-        {
-            ChangeState(chatState);
         }
     }
 
@@ -56,6 +55,12 @@ public class StateController : MonoBehaviour
             currentState.OnExit(this);
         }
         currentState = newState;
+        Debug.Log(currentState);
         currentState.OnEnter(this);
+    }
+
+    void ActivateAlertState()
+    {
+        ChangeState(alerteState);
     }
 }

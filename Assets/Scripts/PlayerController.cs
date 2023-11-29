@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,8 @@ public class PlayerController : MonoBehaviour
     /// un niveau.
     /// </summary>
     CharacterController _characterController;
+
+    public event Action OnNoiseMade;
 
     /// <summary>
     /// Vitesse de déplacement (en m/s) du personnage.
@@ -36,5 +39,13 @@ public class PlayerController : MonoBehaviour
         Vector3 velocity = inputDirection * _moveSpeed * Time.deltaTime;
 
         _characterController.Move(velocity);
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (OnNoiseMade != null)
+            {
+                OnNoiseMade.Invoke();
+            }
+        }
     }
 }

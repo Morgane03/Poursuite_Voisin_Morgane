@@ -9,10 +9,16 @@ public class ChatState : IState
     private float conversationTime = 3f;
     private float timer = 0f;
 
+    public ChatState(NavMeshAgent navMeshAgent, float conversationTime, float timer)
+    {
+        this.navMeshAgent = navMeshAgent;
+        this.conversationTime = conversationTime;
+        this.timer = 0;
+    }
+
     public void OnEnter(StateController controller)
     {
-        navMeshAgent.isStopped = true;
-        
+        navMeshAgent.speed = 0f;
     }
 
     public void UpdateState(StateController controller)
@@ -31,6 +37,6 @@ public class ChatState : IState
 
     public void OnExit(StateController controller)
     {
-        navMeshAgent.isStopped = false;
+        navMeshAgent.speed = 3.5f;
     }
 }

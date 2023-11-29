@@ -20,22 +20,25 @@ public class PursuingState : IState
         navMeshAgent.enabled = true;
         navMeshAgent.SetDestination(player.position);
     }
+
     public void UpdateState(StateController controller)
     {
-        // Vérifier si le joueur est encore dans la distance de poursuite
+        navMeshAgent.destination = player.position;
+
+        // Vérifier si le joueurest toujours dans la distance de poursuite et si non repart en patrol
         if (MathHelper.VectorDistance(controller.transform.position, player.position) > controller.pursueDistance)
         {
             controller.ChangeState(controller.patrolState);
         }
     }
+
     public void OnHurt(StateController controller)
     {
         controller.ChangeState(controller.patrolState);
     }
-
     
     public void OnExit(StateController controller)
     {
-        navMeshAgent.enabled = false;
+
     }
 }
