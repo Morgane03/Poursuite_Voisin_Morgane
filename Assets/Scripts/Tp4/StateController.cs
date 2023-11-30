@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-
+// explication base avec une interface venu du site https://gamedevbeginner.com/state-machines-in-unity-how-and-when-to-use-them/
 public interface IState
 {
     public void OnEnter(StateController controller);
